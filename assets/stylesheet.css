@@ -18,11 +18,12 @@ footer {
     height: 400px;
     text-align: center;
     position: relative;
+    resize: vertical;
+    overflow: hidden;
+    border: 1px solid;
 }
 
 canvas {
-    border: 1px solid;
-    display: inline;
     margin: 0 auto;
 }
 
@@ -43,9 +44,14 @@ button:hover {
 
 ul {
     list-style: none;
+    margin: 0;
 }
 
 li {
     text-align: center;
-    margin: 1rem;
+    margin: 0 auto;
+}
+
+h1 {
+    margin-bottom: 0;
 }

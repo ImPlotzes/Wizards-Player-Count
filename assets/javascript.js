@@ -1,6 +1,8 @@
 let chart;
 function loader() {
-    document.getElementById("update").addEventListener("click", updateChart)
+    document.getElementById("update").addEventListener("click", updateChart);
+    document.getElementById("24hTime").addEventListener("change", timeChange);
+    document.getElementById("seconds").addEventListener("change", timeChange);
 
     var ctx = document.getElementById('graph').getContext('2d');
     chart = new Chart(ctx, {
@@ -11,7 +13,8 @@ function loader() {
                 data: [],
                 borderColor: "rgba(63, 191, 189, 0.29)",
                 backgroundColor: "rgba(63, 191, 189, 0.06)",
-                pointStyle: "crossRot"
+                pointStyle: "rectRot",
+                pointBackgroundColor: "rgb(62, 214, 211)"
             }]
         },
         options: {
@@ -46,8 +49,7 @@ function loader() {
                     time: {
                         unit: "minute",
                         displayFormats: { minute: "HH:mm"},
-                        tooltipFormat: "MMMM Do, HH:mm:ss",
-                        stepSize: 5
+                        tooltipFormat: "MMMM Do, HH:mm"
                     }
                 }]
             }
@@ -76,14 +78,43 @@ async function updateChart() {
             y: point.count
         }
         newData.push(formattedPoint);
-        if(i == apiData.length - 1) {
-            document.getElementById("count").innerHTML = "Wizards had " + point.count + " players at " + formattedPoint.x.toLocaleTimeString();
-        }
     }
 
+    const diffMs = newData[newData.length - 1].x - newData[0].x;
+    const diffMins = Math.floor((diffMs/1000)/60);
+    let stepSize;
+    if(diffMins < 60) {
+        stepSize = 1;
+    } else if(diffMins < 180) {
+        stepSize = 5;
+    } else {
+        stepSize = 10;
+    }
+
+    chart.options.scales.xAxes[0].time.stepSize = stepSize;
     chart.data.labels = newLabels;
     chart.data.datasets[0].data = newData;
-    console.log(JSON.stringify(newData, null, 2));
+    updateTime(document.getElementById("24hTime").checked, document.getElementById("seconds").checked);
+}
+
+function timeChange(event) {
+    updateTime(document.getElementById("24hTime").checked, document.getElementById("seconds").checked);
+}
+
+function updateTime(milTime, seconds) {
+    let time = milTime ? "HH:mm" : "hh:mm";
+    if(seconds){
+        time += ":ss";
+    }
+    if(!milTime) {
+        time += " A";
+    }
+
+    chart.options.scales.xAxes[0].time.displayFormats.minute = time.replace(":ss", "");
+    chart.options.scales.xAxes[0].time.tooltipFormat = "MMMM Do, " + time;
+    const lastCall = chart.data.datasets[0].data[chart.data.datasets[0].data.length - 1]
+    const formattedTime = moment(lastCall.x).format(time);
+    document.getElementById("count").innerHTML = "Wizards had " + lastCall.y + " players at " + formattedTime;
     chart.update();
 }
 
