@@ -35,11 +35,17 @@ button {
     outline: none;
     font-size: 18px;
     color: lightgray;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
 }
   
 button:hover {
     background-color: #122f3a;
+}
+
+button:disabled {
+    background-color: rgba(18, 49, 61, 0.692);
+    color: #a0a0a0a4;
+    text-decoration: line-through;
 }
 
 ul {

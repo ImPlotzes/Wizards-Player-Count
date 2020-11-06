@@ -59,6 +59,10 @@ function loader() {
 }
 
 async function updateChart() {
+    document.getElementById("update").disabled = true;
+    setTimeout(() => {
+        document.getElementById("update").disabled = false;
+    }, 1000);
     document.getElementById("count").innerHTML = "Loading...";
     let apiHTML = await fetch("https://wizcount.plotzes.ml");
     apiHTML = await apiHTML.text();
