@@ -4,12 +4,12 @@ function loader() {
     document.getElementById("24hTime").addEventListener("change", timeChange);
     document.getElementById("seconds").addEventListener("change", timeChange);
 
-    var ctx = document.getElementById('graph').getContext('2d');
+    var ctx = document.getElementById("graph").getContext("2d");
     chart = new Chart(ctx, {
-        type: 'line',
+        type: "line",
         data: {
             datasets: [{
-                label: 'Player count',
+                label: "Player count",
                 data: [],
                 borderColor: "rgba(63, 191, 189, 0.29)",
                 backgroundColor: "rgba(63, 191, 189, 0.06)",
@@ -34,7 +34,7 @@ function loader() {
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: '# of players in Wizards'
+                        labelString: "# of players in Wizards"
                     },
                     ticks: {
                         beginAtZero: true
@@ -43,7 +43,7 @@ function loader() {
                 xAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Time (local)'
+                        labelString: "Time (local)"
                     },
                     type: "time",
                     time: {
@@ -80,7 +80,7 @@ async function updateChart() {
         const formattedPoint = {
             x: new Date(point.time),
             y: point.count
-        }
+        };
         newData.push(formattedPoint);
     }
 
@@ -116,7 +116,7 @@ function updateTime(milTime, seconds) {
 
     chart.options.scales.xAxes[0].time.displayFormats.minute = time.replace(":ss", "");
     chart.options.scales.xAxes[0].time.tooltipFormat = "MMMM Do, " + time;
-    const lastCall = chart.data.datasets[0].data[chart.data.datasets[0].data.length - 1]
+    const lastCall = chart.data.datasets[0].data[chart.data.datasets[0].data.length - 1];
     const formattedTime = moment(lastCall.x).format(time);
     document.getElementById("count").innerHTML = "Wizards had " + lastCall.y + " players at " + formattedTime;
     chart.update();
