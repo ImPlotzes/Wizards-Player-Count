@@ -48,7 +48,7 @@ function loader() {
                     type: "time",
                     time: {
                         unit: "minute",
-                        displayFormats: { minute: "HH:mm"},
+                        displayFormats: { minute: "HH:mm" },
                         tooltipFormat: "MMMM Do, HH:mm"
                     }
                 }]
@@ -87,12 +87,14 @@ async function updateChart() {
     const diffMs = newData[newData.length - 1].x - newData[0].x;
     const diffMins = Math.floor((diffMs/1000)/60);
     let stepSize;
-    if(diffMins < 60) {
+    if(diffMins < 1 * 60) {
         stepSize = 1;
-    } else if(diffMins < 180) {
+    } else if(diffMins < 3 * 60) {
         stepSize = 5;
-    } else {
+    } else if(diffMins < 8.5 * 60) {
         stepSize = 10;
+    } else {
+        stepSize = 15;
     }
 
     chart.options.scales.xAxes[0].time.stepSize = stepSize;
